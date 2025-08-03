@@ -1,29 +1,359 @@
 [
     {
-        "x": 30,
-        "y": 40,
-        "province": "北京",
+        "x": "60.84",
+        "y": "66.65",
+        "province": "湖北省",
+        "city": "武汉市",
+        "classmates": [
+            {"name": "赵文硕", "university": "华中农业大学", "address": "湖北省武汉市洪山区狮子山街1号"},
+            {"name": "马语涵", "university": "华中农业大学", "address": "湖北省武汉市洪山区狮子山街1号"},
+            {"name": "陈颖婧", "university": "华中师范大学", "address": "湖北省武汉市洪山区珞喻路152号"},
+            {"name": "户学烁", "university": "武汉工程大学", "address": "湖北省武汉市江夏区流芳大道19号"},
+            {"name": "刘钊辰", "university": "武汉理工大学", "address": "湖北省武汉市洪山区珞狮路122号"}
+        ]
+    },
+    {
+        "x": "64.46",
+        "y": "44.37",
+        "province": "天津市",
+        "city": "天津市",
+        "classmates": [
+            {"name": "陈家珺", "university": "河北工业大学", "address": "天津市北辰区西平道5340号"},
+            {"name": "张宏浩", "university": "河北工业大学", "address": "天津市北辰区西平道5340号"},
+            {"name": "王子涵", "university": "河北工业大学", "address": "天津市北辰区西平道5340号"},
+            {"name": "宋文聪", "university": "河北工业大学", "address": "天津市红桥区丁字沽一号路8号"},
+            {"name": "路华扬", "university": "河北工业大学", "address": "天津市红桥区丁字沽一号路8号"},
+            {"name": "张镜棣", "university": "河北工业大学", "address": "天津市红桥区丁字沽一号路8号"},
+            {"name": "张俊意", "university": "河北工业大学", "address": "天津市红桥区丁字沽一号路8号"},
+            {"name": "李沛霖", "university": "河北工业大学", "address": "天津市红桥区丁字沽一号路8号"},
+            {"name": "吕欣芮", "university": "河北工业大学", "address": "天津市红桥区丁字沽一号路8号"},
+            {"name": "李志尚", "university": "河北工业大学", "address": "天津市红桥区丁字沽一号路8号"},
+            {"name": "王美月", "university": "河北工业", "address": "天津市红桥区丁字沽一号路8号"},
+            {"name": "赵一帆", "university": "河北工业大学", "address": "天津市北辰区西平道5340号"},
+            {"name": "原祯帧", "university": "河北工业", "address": "天津市北辰区西平道5340号"},
+            {"name": "宋乐涵", "university": "天津大学", "address": "天津市南开区卫津路92号"},
+            {"name": "黄萌萌", "university": "天津大学", "address": "天津市津南区海河教育园雅观路135号"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "重庆市",
+        "city": "重庆市",
+        "classmates": [
+            {"name": "吕相辉", "university": "重庆大学", "address": "重庆市沙坪坝区沙正街174号"},
+            {"name": "张琪", "university": "四川外国语大学", "address": "重庆市沙坪坝区壮志路33号"}
+        ]
+    },
+    {
+        "x": "63.24",
+        "y": "42.58",
+        "province": "北京市",
         "city": "北京市",
         "classmates": [
-            {"name": "张三", "university": "清华大学"},
-            {"name": "李四", "university": "北京大学"}
+            {"name": "闫江容", "university": "北京交通大学", "address": "北京市海淀区西直门外上园村3号"},
+            {"name": "张丹", "university": "北京科技大学", "address": "北京市海淀区学院路30号"},
+            {"name": "李浩", "university": "北京航空航天大学", "address": "北京市海淀区学院路37号"},
+            {"name": "史保烁", "university": "中国地质大学", "address": "北京市海淀区学院路29号"},
+            {"name": "路梦欣", "university": "北京化工大学", "address": "北京市昌平区南口镇南涧路29号"}
         ]
     },
     {
-        "x": 60,
-        "y": 70,
-        "province": "上海",
+        "x": "",
+        "y": "",
+        "province": "陕西省",
+        "city": "西安市",
+        "classmates": [
+            {"name": "谢锦涛", "university": "西安交通大学", "address": "陕西省西安市碑林区咸宁西路28号"},
+            {"name": "王修宽", "university": "西安建筑科技大学", "address": "陕西省西安市鄠邑区沣京路100号"},
+            {"name": "马云程", "university": "西安电子科技大学", "address": "陕西省西安市新城区金花北路1号"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "江苏省",
+        "city": "扬州市",
+        "classmates": [
+            {"name": "李树杭", "university": "扬州大学", "address": "江苏省扬州市邗江区大学南路88号"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "上海市",
         "city": "上海市",
         "classmates": [
-            {"name": "王五", "university": "复旦大学"},
-            {"name": "赵六", "university": "上海交通大学"}
+            {"name": "李馥芸", "university": "东华大学", "address": "上海市松江区人民北路2999号"},
+            {"name": "孙灏洋", "university": "华东理工大学", "address": "上海市奉贤区海泉路100号"},
+            {"name": "刘建骏", "university": "华东理工大学", "address": "上海市奉贤区海泉路100号"}
         ]
     },
     {
-        "x": 45,
-        "y": 55,
-        "province": "江苏",
+        "x": "",
+        "y": "",
+        "province": "山东省",
+        "city": "青岛市",
+        "classmates": [
+            {"name": "刘琳娜", "university": "康复大学", "address": "山东省青岛市城阳区嘉陵江路"},
+            {"name": "刘若彤", "university": "青岛大学", "address": "山东省青岛市崂山区宁夏路308号"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "黑龙江省",
+        "city": "哈尔滨市",
+        "classmates": [
+            {"name": "宋子朔", "university": "哈尔滨工程大学", "address": "黑龙江省哈尔滨市南岗区南通大街145号"},
+            {"name": "马欣泽", "university": "哈尔滨工程大学", "address": "黑龙江省哈尔滨市南岗区南通大街145号"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "山东省",
+        "city": "淄博市",
+        "classmates": [
+            {"name": "黄慈嫄", "university": "山东理工大学", "address": "山东省淄博市张店区新村西路266号"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "四川省",
+        "city": "成都市",
+        "classmates": [
+            {"name": "许晓乐", "university": "四川师范大学", "address": "四川省成都市龙泉驿区成龙大道二段1819号"},
+            {"name": "李笑欧", "university": "西南交通大学", "address": "四川省成都市郫都区犀安路999号"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "江苏省",
         "city": "南京市",
         "classmates": [
-            {"name": "钱七", "university": "南京大学"},
-            {"name": "孙八", "universit
+            {"name": "马宇哲", "university": "东南大学", "address": "江苏省南京市江宁区东南大学路2号"},
+            {"name": "张凤茹", "university": "东南大学", "address": "江苏省南京市江宁区东南大学路2号"},
+            {"name": "王清奇", "university": "南京农业大学", "address": "江苏省南京市玄武区卫岗1号"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "新疆维吾尔自治区",
+        "city": "石河子市",
+        "classmates": [
+            {"name": "张怀智", "university": "石河子大学", "address": "新疆维吾尔自治区石河子市石河子大学"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "安徽省",
+        "city": "合肥市",
+        "classmates": [
+            {"name": "刘砚泽", "university": "合肥工业大学", "address": "安徽省合肥市包河区屯溪路193号"},
+            {"name": "张熙博", "university": "中国科学技术大学", "address": "安徽省合肥市包河区金寨路96号"},
+            {"name": "杨长硕", "university": "中国科学技术大学", "address": "安徽省合肥市蜀山区黄山路443号"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "吉林省",
+        "city": "长春市",
+        "classmates": [
+            {"name": "张英帅", "university": "长春工业大学", "address": "吉林省长春市朝阳区延安大街2055号"},
+            {"name": "刘祖盛", "university": "长春大学", "address": "吉林省长春市朝阳区卫星路6543号"},
+            {"name": "刘琪", "university": "长春理工大学", "address": "吉林省长春市绿园区卫星路7089号"},
+            {"name": "马菁钖", "university": "吉林大学", "address": "吉林省长春市朝阳区前进大街2699号"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "福建省",
+        "city": "厦门市",
+        "classmates": [
+            {"name": "贾玲玲", "university": "华侨大学", "address": "福建省厦门市集美区集美大道668号"},
+            {"name": "秦鸣雨", "university": "厦门大学", "address": "福建省厦门市思明区思明南路422号"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "河北省",
+        "city": "保定市",
+        "classmates": [
+            {"name": "赵越", "university": "河北大学", "address": "河北省保定市莲池区五四东路180号"},
+            {"name": "朱新檬", "university": "河北大学", "address": "河北省保定市莲池区五四东路180号"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "山西省",
+        "city": "太原市",
+        "classmates": [
+            {"name": "张莹姿", "university": "太原理工大学", "address": "山西省太原市万柏林区迎泽西大街79号"},
+            {"name": "高晨阳", "university": "太原理工大学", "address": "山西省太原市晋源区大昌南路2号"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "江苏省",
+        "city": "镇江市",
+        "classmates": [
+            {"name": "孙玉霏", "university": "江苏大学", "address": "江苏省镇江市京口区学府路301号"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "河北省",
+        "city": "秦皇岛市",
+        "classmates": [
+            {"name": "杨梓苗", "university": "东北大学秦皇岛分校", "address": "河北省秦皇岛市经济技术开发区泰山路143号"},
+            {"name": "毕铭真", "university": "燕山大学", "address": "河北省秦皇岛市海港区河北大街西段438号"},
+            {"name": "宋建鹏", "university": "燕山大学", "address": "河北省秦皇岛市海港区河北大街西段438号"},
+            {"name": "王梦涵", "university": "燕山大学", "address": "河北省秦皇岛市海港区河北大街西段438号"},
+            {"name": "殷清雷", "university": "燕山大学", "address": "河北省秦皇岛市海港区河北大街西段438号"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "辽宁省",
+        "city": "沈阳市",
+        "classmates": [
+            {"name": "潘妍", "university": "东北大学", "address": "辽宁省沈阳市和平区文化路3号巷11号"},
+            {"name": "范丽君", "university": "沈阳工业大学", "address": "辽宁省沈阳市铁西区兴顺街南十三路1号"},
+            {"name": "赵重阳", "university": "沈阳工程学院", "address": "辽宁省沈阳市沈北新区蒲昌路18号"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "江苏省",
+        "city": "无锡市",
+        "classmates": [
+            {"name": "张宛瑾", "university": "南京理工大学", "address": "江苏省无锡市江阴市福星路8号"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "湖南省",
+        "city": "长沙市",
+        "classmates": [
+            {"name": "许博妍", "university": "湖南大学", "address": "湖南省长沙市岳麓区麓山南路麓山门"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "河北省",
+        "city": "承德市",
+        "classmates": [
+            {"name": "邢恩东", "university": "承德医学院", "address": "河北省承德市双桥区安远路21号"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "广东省",
+        "city": "广州市",
+        "classmates": [
+            {"name": "孟令灿", "university": "中山大学", "address": "广东省广州市海珠区新港西路135号"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "海南省",
+        "city": "海口市",
+        "classmates": [
+            {"name": "穆朝鑫", "university": "海南大学", "address": "海南省海口市龙华区人民大道58号"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "河北省",
+        "city": "唐山市",
+        "classmates": [
+            {"name": "贾海涵", "university": "华北理工大学", "address": "河北省唐山市曹妃甸区渤海大道21号"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "河北省",
+        "city": "石家庄市",
+        "classmates": [
+            {"name": "刘瑕", "university": "河北经贸大学", "address": "河北省石家庄市桥西区红旗大街428号"},
+            {"name": "王帅翔", "university": "河北科技大学", "address": "河北省石家庄市裕华区裕翔街26号"},
+            {"name": "宋新媛", "university": "河北医科大学", "address": "河北省石家庄市长安区中山东路361号"},
+            {"name": "柳雅楠", "university": "河北医科大学", "address": "河北省石家庄市长安区中山东路361号"},
+            {"name": "王新杨", "university": "河北医科大学", "address": "河北省石家庄市长安区中山东路361号"},
+            {"name": "李洪録", "university": "石家庄铁道大学", "address": "河北省石家庄市长安区北二环东路17号"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "河南省",
+        "city": "郑州市",
+        "classmates": [
+            {"name": "刘冰", "university": "河南工业大学", "address": "河南省郑州市中原区莲花街100号"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "湖南省",
+        "city": "衡阳市",
+        "classmates": [
+            {"name": "宋思琪", "university": "南华大学", "address": "湖南省衡阳市蒸湘区常胜西路28号"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "陕西省",
+        "city": "咸阳市",
+        "classmates": [
+            {"name": "云勇明", "university": "西北农林科技大学", "address": "陕西省咸阳市杨陵区邰城路3号"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "西藏自治区",
+        "city": "拉萨市",
+        "classmates": [
+            {"name": "马顺泉", "university": "西藏大学", "address": "西藏自治区拉萨市城关区藏大西路22号"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "河北省",
+        "city": "张家口市",
+        "classmates": [
+            {"name": "张紫璇", "university": "河北北方", "address": "河北省张家口市桥东区钻石南路11号"}
+        ]
+    },
+    {
+        "x": "",
+        "y": "",
+        "province": "福建省",
+        "city": "福州市",
+        "classmates": [
+            {"name": "齐姝萌", "university": "福建医科大学", "address": "福建省福州市鼓楼区交通路88号"}
+        ]
+    }
+]

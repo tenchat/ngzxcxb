@@ -3,33 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>毕业同学地图</title>
+    <title>2021届创新班蹭饭图</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <div id="map-container">
-            <!-- 中国地图SVG将在这里插入 -->
-        </div>
-    </div>
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modal-title"></h2>
+    <div class="app-container">
+        <div class="map-wrapper">
+            <div id="map" class="map-area">
+                <!-- 地图SVG将通过JS动态加载 -->
+                <div class="points-container"></div>
             </div>
-            <div class="modal-body">
+        </div>
+        
+        <div id="loading" class="loading-overlay">
+            <div class="loading-content">
+                <div class="spinner"></div>
+                <p>正在加载数据...</p>
+            </div>
+        </div>
+        
+        <div id="modal" class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modal-title">同学信息</h2>
+                    <div id="classmate-count" class="classmate-count"></div>
+                    <button class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body">
                 <table id="classmates-table">
                     <thead>
                         <tr>
                             <th>姓名</th>
                             <th>大学</th>
+                            <th>地址</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
                 </table>
+                </div>
             </div>
         </div>
     </div>
+    
     <script src="main.js"></script>
 </body>
 </html>

@@ -1,53 +1,119 @@
-// 全局变量和配置
-const config = {
-    currentBgIndex: 1,
-    maxBgImages: 10, // 背景图数量
-    pointSize: 20,   // 标点大小(px)
-    pointColor: '#ff5722' // 标点颜色
-};
+/**
+ * 毕业同学地图应用 - 优化版
+ * 功能：展示中国地图上的同学分布信息
+ */
 
-// 初始化函数
-async function init() {
-    // 加载背景图
-    loadBackground();
-    
-    // 加载中国地图
-    loadChinaMap();
-    
-    // 显示加载状态
-    const loadingIndicator = document.createElement('div');
-    loadingIndicator.id = 'loading';
-    loadingIndicator.textContent = '正在加载数据...';
-    loadingIndicator.style.position = 'fixed';
-    loadingIndicator.style.top = '20px';
-    loadingIndicator.style.left = '50%';
-    loadingIndicator.style.transform = 'translateX(-50%)';
-    loadingIndicator.style.padding = '10px 20px';
-    loadingIndicator.style.background = 'rgba(0,0,0,0.7)';
-    loadingIndicator.style.color = 'white';
-    loadingIndicator.style.borderRadius = '5px';
-    document.body.appendChild(loadingIndicator);
-    
-    try {
-        // 从JSON文件加载数据
-        const response = await fetch('data/classmates.json');
-        if (!response.ok) throw new Error('数据加载失败');
+class ClassmateMap {
+    constructor() {
+        this.config = {
+            pointSize: 20,
+            pointColor: '#ff5722',
+            pointHoverColor: '#ff9800'
+        };
         
-        const classmatesData = await response.json();
-        addPoints(classmatesData);
+        this.domElements = {
+            mapContainer: document.querySelector('.map-area'),
+            pointsContainer: document.querySelector('.points-container'),
+            loadingOverlay: document.getElementById('loading'),
+            modal: document.getElementById('modal'),
+            modalTitle: document.getElementById('modal-title'),
+            classmatesTable: document.querySelector('#classmates-table tbody'),
+            closeBtn: document.querySelector('.close-btn')
+        };
         
-        loadingIndicator.textContent = '数据加载完成';
-        setTimeout(() => {
-            loadingIndicator.remove();
-        }, 1000);
-    } catch (error) {
-        console.error('初始化错误:', error);
-        loadingIndicator.textContent = '数据加载失败，使用示例数据';
+        this.init();
+    }
+    
+    async init() {
+        this.showLoading('正在加载数据...');
         
-        // 使用内置示例数据作为后备
-        const exampleData = [
+        try {
+            // 并行加载地图和数据
+            await Promise.all([
+                this.loadMap('china.svg'),
+                this.loadData('data/classmates.json')
+            ]);
+            
+            this.hideLoading();
+        } catch (error) {
+            console.error('初始化失败:', error);
+            this.showLoading('加载失败，使用示例数据', 2000);
+            this.useSampleData();
+        }
+        
+        this.setupEventListeners();
+    }
+    
+    async loadMap(mapFile) {
+        try {
+            const response = await fetch(mapFile);
+            if (!response.ok) throw new Error('地图加载失败');
+            
+            const svgData = await response.text();
+            this.domElements.mapContainer.insertAdjacentHTML('afterbegin', svgData);
+            
+            // 确保SVG正确显示
+            const svg = this.domElements.mapContainer.querySelector('svg');
+            if (svg) {
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+    
+    async loadData(dataFile) {
+        try {
+            const filePath = `./${dataFile}`;
+            console.log(`正在尝试加载数据文件: ${filePath}`);
+            
+            const response = await fetch(filePath, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`数据加载失败，HTTP状态码: ${response.status}`);
+            }
+            
+            // 先获取文本内容进行验证
+            const textData = await response.text();
+            console.log('原始JSON文本:', textData);
+            
+            // 验证JSON格式
+            try {
+                const data = JSON.parse(textData);
+                if (!Array.isArray(data)) {
+                    throw new Error('JSON数据格式错误：应为数组');
+                }
+                
+                console.log('成功解析JSON数据:', data);
+                this.createPoints(data);
+            } catch (parseError) {
+                console.error('JSON解析错误:', parseError);
+                // 尝试修复常见的JSON格式问题
+                const sanitizedText = textData
+                    .replace(/[\u0000-\u001F]+/g, '') // 移除控制字符
+                    .replace(/,\s*}/g, '}') // 修复多余的逗号
+                    .replace(/,\s*]/g, ']'); // 修复多余的逗号
+                
+                console.log('尝试修复后的JSON:', sanitizedText);
+                const fixedData = JSON.parse(sanitizedText);
+                this.createPoints(fixedData);
+            }
+        } catch (error) {
+            console.error('加载数据时出错:', error);
+            throw error;
+        }
+    }
+    
+    useSampleData() {
+        const sampleData = [
             {
-                x: 30, y: 40,
+                x: 63, y: 43,
                 province: "北京",
                 city: "北京市",
                 classmates: [
@@ -56,7 +122,7 @@ async function init() {
                 ]
             },
             {
-                x: 60, y: 70,
+                x: 72.6, y: 64.51,
                 province: "上海",
                 city: "上海市",
                 classmates: [
@@ -66,129 +132,95 @@ async function init() {
             }
         ];
         
-        addPoints(exampleData);
+        this.createPoints(sampleData);
+    }
+    
+    createPoints(data) {
+        data.forEach(item => {
+            const point = this.createPointElement(item);
+            this.domElements.pointsContainer.appendChild(point);
+        });
+    }
+    
+    createPointElement(data) {
+        const point = document.createElement('div');
+        point.className = 'point';
+        point.style.left = `${data.x}%`;
+        point.style.top = `${data.y}%`;
         
-        setTimeout(() => {
-            loadingIndicator.remove();
-        }, 2000);
+        // 存储数据以便后续使用
+        point.dataset.province = data.province;
+        point.dataset.city = data.city;
+        point.dataset.classmates = JSON.stringify(data.classmates);
+        point.dataset.count = data.classmates.length; // 添加同学数量
+        
+        // 为特定城市设置不同图片
+        if (data.city === '北京市') { // 示例：为北京使用tp1.png
+            point.style.backgroundImage = 'url("images/tp1.png")';
+        } 
+        //else if (data.city === '上海市') { // 示例：为上海使用tp3.png
+            //point.style.backgroundImage = 'url("images/tp3.png")';}
+        // 其他城市保持默认tp2.png
+        
+        point.addEventListener('click', () => this.showClassmateInfo(data));
+        
+        return point;
+    }
+    showClassmateInfo(data) {
+        // 更新模态框标题
+        this.domElements.modalTitle.textContent = `${data.province}-${data.city}`;
+        
+        // 更新同学数量
+        const countElement = document.getElementById('classmate-count');
+        countElement.textContent = `共${data.classmates.length}名同学`;
+        
+        // 清空表格
+        this.domElements.classmatesTable.innerHTML = '';
+        
+        // 填充同学数据
+        data.classmates.forEach(classmate => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${classmate.name}</td>
+                <td>${classmate.university}</td>
+                <td>${classmate.address}</td>
+            `;
+            this.domElements.classmatesTable.appendChild(row);
+        });
+        
+        // 显示模态框
+        this.domElements.modal.style.display = 'flex';
+    }
+    
+    showLoading(message, duration = 0) {
+        this.domElements.loadingOverlay.style.display = 'flex';
+        this.domElements.loadingOverlay.querySelector('p').textContent = message;
+        
+        if (duration > 0) {
+            setTimeout(() => this.hideLoading(), duration);
+        }
+    }
+    
+    hideLoading() {
+        this.domElements.loadingOverlay.style.display = 'none';
+    }
+    
+    setupEventListeners() {
+        // 关闭模态框
+        this.domElements.closeBtn.addEventListener('click', () => {
+            this.domElements.modal.style.display = 'none';
+        });
+        
+        // 点击模态框外部关闭
+        this.domElements.modal.addEventListener('click', (e) => {
+            if (e.target === this.domElements.modal) {
+                this.domElements.modal.style.display = 'none';
+            }
+        });
     }
 }
 
-// 加载背景图
-function loadBackground() {
-    document.body.style.backgroundImage = `url('bg.jpg')`;
-}
-
-// 加载中国地图
-function loadChinaMap() {
-    const mapContainer = document.getElementById('map-container');
-    
-    // 使用fetch加载SVG地图
-    fetch('China_map.svg')
-        .then(response => response.text())
-        .then(svgData => {
-            mapContainer.innerHTML = svgData;
-            // 确保SVG填充容器
-            const svg = mapContainer.querySelector('svg');
-            if (svg) {
-                svg.style.width = '100%';
-                svg.style.height = 'auto';
-            }
-        })
-        .catch(error => {
-            console.error('加载地图失败:', error);
-            mapContainer.innerHTML = '<div class="map-error">无法加载地图，请确保china.svg文件存在</div>';
-        });
-}
-
-// 添加标点到地图
-function addPoints(data) {
-    const mapContainer = document.getElementById('map-container');
-    
-    data.forEach(item => {
-        const point = createPointElement(item);
-        mapContainer.appendChild(point);
-    });
-}
-
-// 创建标点元素
-function createPointElement(data) {
-    const point = document.createElement('div');
-    point.className = 'point';
-    point.style.left = `${data.x}%`;
-    point.style.top = `${data.y}%`;
-    point.style.width = `${config.pointSize}px`;
-    point.style.height = `${config.pointSize}px`;
-    point.style.backgroundColor = config.pointColor;
-    
-    // 添加数据属性以便调试
-    point.dataset.province = data.province;
-    point.dataset.city = data.city;
-    
-    point.addEventListener('click', () => {
-        playSound(data.city);
-        showModal(data);
-    });
-    
-    return point;
-}
-
-// 播放声音
-function playSound(cityName) {
-    return new Promise((resolve) => {
-        const audio = new Audio(`sounds/${cityName}.mp3`);
-        audio.play()
-            .then(() => {
-                audio.addEventListener('ended', resolve);
-            })
-            .catch(e => {
-                console.log('音频播放被阻止:', e);
-                resolve(); // 即使播放失败也继续执行
-            });
-    });
-}
-
-// 显示模态框
-async function showModal(data) {
-    const modal = document.getElementById('modal');
-    const modalTitle = document.getElementById('modal-title');
-    const tableBody = document.querySelector('#classmates-table tbody');
-    
-    // 播放声音
-    await playSound(data.city);
-    
-    // 设置标题
-    modalTitle.textContent = `${data.province}-${data.city}`;
-    
-    // 清空表格
-    tableBody.innerHTML = '';
-    
-    // 填充数据
-    data.classmates.forEach(classmate => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${classmate.name}</td>
-            <td>${classmate.university}</td>
-        `;
-        tableBody.appendChild(row);
-    });
-    
-    // 随机设置模态框背景
-    const randomBgIndex = Math.floor(Math.random() * config.maxBgImages) + 1;
-    document.querySelector('.modal-header').style.backgroundImage = `url('images/${randomBgIndex}.jpg')`;
-    
-    // 显示模态框
-    modal.style.display = 'flex';
-    
-    // 点击模态框外部关闭
-    const closeModal = (e) => {
-        if (e.target === modal) {
-            modal.style.display = 'none';
-            modal.removeEventListener('click', closeModal);
-        }
-    };
-    modal.addEventListener('click', closeModal);
-}
-
-// 页面加载完成后初始化
-document.addEventListener('DOMContentLoaded', init);
+// 当DOM加载完成后初始化应用
+document.addEventListener('DOMContentLoaded', () => {
+    new ClassmateMap();
+});
