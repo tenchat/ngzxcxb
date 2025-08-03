@@ -8,7 +8,8 @@ class ClassmateMap {
         this.config = {
             pointSize: 20,
             pointColor: '#ff5722',
-            pointHoverColor: '#ff9800'
+            pointHoverColor: '#ff9800',
+            backgroundImages: Array.from({length: 93}, (_, i) => `bg/${i+1}.jpg`) // 图片存放在bg文件夹内，命名为1.jpg~n.jpg
         };
         
         this.domElements = {
@@ -21,7 +22,18 @@ class ClassmateMap {
             closeBtn: document.querySelector('.close-btn')
         };
         
+        this.setRandomBackground();
         this.init();
+    }
+
+    setRandomBackground() {
+        const randomIndex = Math.floor(Math.random() * this.config.backgroundImages.length);
+        const bgImage = this.config.backgroundImages[randomIndex];
+        document.body.style.backgroundImage = `url('${bgImage}')`;
+        console.log(`已设置背景图片: ${bgImage}`); // 添加日志便于调试
+        document.body.style.backgroundSize = 'cover';
+        document.body.style.backgroundPosition = 'center';
+        document.body.style.backgroundRepeat = 'no-repeat';
     }
     
     async init() {
@@ -173,7 +185,20 @@ class ClassmateMap {
         
         return point;
     }
+    getRandomImage() {
+        const imageCount = 3; // 假设images文件夹下有1.jpg~3.jpg
+        const randomIndex = Math.floor(Math.random() * imageCount) + 1;
+        return `images/tp${randomIndex}.png`;
+    }
+
     showClassmateInfo(data) {
+        // 设置随机弹窗背景
+        const modalBody = this.domElements.modal.querySelector('.modal-body');
+        modalBody.style.backgroundImage = `url('${this.getRandomImage()}')`;
+        modalBody.style.backgroundSize = 'cover';
+        modalBody.style.backgroundPosition = 'center';
+        modalBody.style.opacity = '0.8';
+        
         // 更新模态框标题
         this.domElements.modalTitle.textContent = `${data.province}-${data.city}`;
         
