@@ -83,31 +83,22 @@ function loadBackground() {
 function loadChinaMap() {
     const mapContainer = document.getElementById('map-container');
     
-    // 检查是否已经有SVG内容
-    if (mapContainer.querySelector('svg')) return;
-    
-    // 尝试加载China_map.svg，如果失败则尝试china.svg
-    Promise.any([
-        fetch('China_map.svg').then(r => r.ok ? r.text() : Promise.reject()),
-        fetch('china.svg').then(r => r.ok ? r.text() : Promise.reject())
-    ])
-    .then(svgData => {
-        mapContainer.innerHTML = svgData;
-        const svg = mapContainer.querySelector('svg');
-        if (svg) {
-            svg.style.width = '100%';
-            svg.style.height = '100%';
-            svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-        }
-    })
-    .catch(error => {
-        console.error('加载地图失败:', error);
-        mapContainer.innerHTML = `
-            <div class="map-error">
-                <p>无法加载地图文件</p>
-                <p>请确保China_map.svg或china.svg存在于项目目录中</p>
-            </div>`;
-    });
+    // 使用fetch加载SVG地图
+    fetch('China_map.svg')
+        .then(response => response.text())
+        .then(svgData => {
+            mapContainer.innerHTML = svgData;
+            // 确保SVG填充容器
+            const svg = mapContainer.querySelector('svg');
+            if (svg) {
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+            }
+        })
+        .catch(error => {
+            console.error('加载地图失败:', error);
+            mapContainer.innerHTML = '<div class="map-error">无法加载地图，请确保china.svg文件存在</div>';
+        });
 }
 
 // 添加标点到地图
@@ -129,59 +120,14 @@ function createPointElement(data) {
     point.style.width = `${config.pointSize}px`;
     point.style.height = `${config.pointSize}px`;
     point.style.backgroundColor = config.pointColor;
-    point.style.borderRadius = '50%';
-    point.style.cursor = 'pointer';
-    point.style.position = 'absolute';
-    point.style.transform = 'translate(-50%, -50%)';
-    point.style.transition = 'transform 0.2s, box-shadow 0.2s';
     
     // 添加数据属性以便调试
     point.dataset.province = data.province;
     point.dataset.city = data.city;
     
-    // 悬停效果
-    point.addEventListener('mouseenter', () => {
-        point.style.transform = 'translate(-50%, -50%) scale(1.2)';
-        point.style.boxShadow = '0 0 10px rgba(255,87,34,0.7)';
-    });
-    
-    point.addEventListener('mouseleave', () => {
-        point.style.transform = 'translate(-50%, -50%) scale(1)';
-        point.style.boxShadow = 'none';
-    });
-    
     point.addEventListener('click', () => {
         playSound(data.city);
         showModal(data);
-    });
-    
-    // 添加工具提示
-    const tooltip = document.createElement('div');
-    tooltip.className = 'tooltip';
-    tooltip.textContent = `${data.city} (${data.classmates.length}位同学)`;
-    tooltip.style.position = 'absolute';
-    tooltip.style.bottom = '100%';
-    tooltip.style.left = '50%';
-    tooltip.style.transform = 'translateX(-50%)';
-    tooltip.style.background = 'rgba(0,0,0,0.8)';
-    tooltip.style.color = 'white';
-    tooltip.style.padding = '5px 10px';
-    tooltip.style.borderRadius = '4px';
-    tooltip.style.fontSize = '12px';
-    tooltip.style.whiteSpace = 'nowrap';
-    tooltip.style.pointerEvents = 'none';
-    tooltip.style.opacity = '0';
-    tooltip.style.transition = 'opacity 0.2s';
-    
-    point.appendChild(tooltip);
-    
-    // 显示/隐藏工具提示
-    point.addEventListener('mouseenter', () => {
-        tooltip.style.opacity = '1';
-    });
-    
-    point.addEventListener('mouseleave', () => {
-        tooltip.style.opacity = '0';
     });
     
     return point;
@@ -207,28 +153,12 @@ async function showModal(data) {
     const modal = document.getElementById('modal');
     const modalTitle = document.getElementById('modal-title');
     const tableBody = document.querySelector('#classmates-table tbody');
-    const closeBtn = document.createElement('div');
-    
-    // 创建关闭按钮
-    closeBtn.className = 'close-btn';
-    closeBtn.innerHTML = '&times;';
-    closeBtn.style.position = 'absolute';
-    closeBtn.style.top = '10px';
-    closeBtn.style.right = '20px';
-    closeBtn.style.fontSize = '28px';
-    closeBtn.style.cursor = 'pointer';
     
     // 播放声音
-    try {
-        await playSound(data.city);
-    } catch (e) {
-        console.log('声音播放失败:', e);
-    }
+    await playSound(data.city);
     
     // 设置标题
     modalTitle.textContent = `${data.province}-${data.city}`;
-    modalTitle.style.position = 'relative';
-    modalTitle.appendChild(closeBtn);
     
     // 清空表格
     tableBody.innerHTML = '';
@@ -246,38 +176,18 @@ async function showModal(data) {
     // 随机设置模态框背景
     const randomBgIndex = Math.floor(Math.random() * config.maxBgImages) + 1;
     document.querySelector('.modal-header').style.backgroundImage = `url('images/${randomBgIndex}.jpg')`;
-    document.querySelector('.modal-header').style.backgroundSize = 'cover';
-    document.querySelector('.modal-header').style.backgroundPosition = 'center';
     
     // 显示模态框
     modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-    
-    // 关闭模态框的函数
-    const closeModal = () => {
-        modal.style.display = 'none';
-        document.body.style.overflow = '';
-        modal.removeEventListener('click', outsideClick);
-        closeBtn.removeEventListener('click', closeModal);
-    };
     
     // 点击模态框外部关闭
-    const outsideClick = (e) => {
+    const closeModal = (e) => {
         if (e.target === modal) {
-            closeModal();
+            modal.style.display = 'none';
+            modal.removeEventListener('click', closeModal);
         }
     };
-    
-    modal.addEventListener('click', outsideClick);
-    closeBtn.addEventListener('click', closeModal);
-    
-    // ESC键关闭
-    document.addEventListener('keydown', function escClose(e) {
-        if (e.key === 'Escape') {
-            closeModal();
-            document.removeEventListener('keydown', escClose);
-        }
-    });
+    modal.addEventListener('click', closeModal);
 }
 
 // 页面加载完成后初始化
