@@ -162,6 +162,13 @@ class ClassmateMap {
             //point.style.backgroundImage = 'url("images/tp3.png")';}
         // 其他城市保持默认tp2.png
         
+        point.addEventListener('mouseenter', () => {
+            // 确保没有其他提示显示
+            document.querySelectorAll('.point::after').forEach(el => {
+                el.style.opacity = '0';
+            });
+        });
+        
         point.addEventListener('click', () => this.showClassmateInfo(data));
         
         return point;
@@ -217,6 +224,42 @@ class ClassmateMap {
                 this.domElements.modal.style.display = 'none';
             }
         });
+        
+        // 检查屏幕方向
+        this.checkOrientation();
+        window.addEventListener('resize', () => this.checkOrientation());
+    }
+    checkOrientation() {
+        // 检测是否为移动设备
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        if (!isMobile) return;
+        
+        // 检查当前会话是否已经显示过提示
+        if (sessionStorage.getItem('orientationHintShown')) {
+            return;
+        }
+        
+        const warning = document.getElementById('orientation-warning');
+        const isPortrait = window.innerHeight > window.innerWidth;
+        
+        // 显示提示，内容根据方向变化
+        warning.style.display = 'block';
+        warning.querySelector('p').textContent = isPortrait 
+            ? '请转至横屏以获得最佳体验！'
+            : '请保持横屏以获得最佳体验！';
+
+        // 标记为当前会话已显示
+        sessionStorage.setItem('orientationHintShown', 'true');
+        
+        // 10秒后自动隐藏
+        setTimeout(() => {
+            warning.style.display = 'none';
+        }, 10000);
+        
+        // 点击任意位置关闭
+        document.addEventListener('click', () => {
+            warning.style.display = 'none';
+        }, { once: true });
     }
 }
 
