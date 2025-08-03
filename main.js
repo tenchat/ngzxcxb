@@ -42,7 +42,7 @@ class ClassmateMap {
         try {
             // 并行加载地图和数据
             await Promise.all([
-                this.loadMap('china.svg'),
+                this.loadMap('/svg/china.svg'),
                 this.loadData('data/classmates.json')
             ]);
             
@@ -181,7 +181,12 @@ class ClassmateMap {
             });
         });
         
-        point.addEventListener('click', () => this.showClassmateInfo(data));
+        point.addEventListener('click', () => {
+            // 播放点击音效
+            const clickSound = new Audio('sounds/MapClick.mp3');
+            clickSound.play().catch(e => console.log('音效播放失败:', e));
+            this.showClassmateInfo(data);
+        });
         
         return point;
     }
@@ -299,12 +304,18 @@ class ClassmateMap {
     setupEventListeners() {
         // 关闭模态框
         this.domElements.closeBtn.addEventListener('click', () => {
+            // 播放关闭音效
+            const closeSound = new Audio('sounds/MenuClose.mp3');
+            closeSound.play().catch(e => console.log('关闭音效播放失败:', e));
             this.domElements.modal.style.display = 'none';
         });
         
         // 点击模态框外部关闭
         this.domElements.modal.addEventListener('click', (e) => {
             if (e.target === this.domElements.modal) {
+                // 播放关闭音效
+                const closeSound = new Audio('sounds/MenuClose.mp3');
+                closeSound.play().catch(e => console.log('关闭音效播放失败:', e));
                 this.domElements.modal.style.display = 'none';
             }
         });
