@@ -9,7 +9,7 @@ class ClassmateMap {
             pointSize: 20,
             pointColor: '#ff5722',
             pointHoverColor: '#ff9800',
-            backgroundImages: Array.from({length: 93}, (_, i) => `bg/${i+1}.jpg`) // 图片存放在bg文件夹内，命名为1.jpg~n.jpg
+            backgroundImages: Array.from({length: 93}, (_, i) => `images/${i+1}.jpg`) // 图片存放在bg文件夹内，命名为1.jpg~n.jpg
         };
         
         this.domElements = {
@@ -186,15 +186,16 @@ class ClassmateMap {
         return point;
     }
     getRandomImage() {
-        const imageCount = 3; // 假设images文件夹下有1.jpg~3.jpg
+        const imageCount = 93; // 假设images文件夹下有1.jpg~3.jpg
         const randomIndex = Math.floor(Math.random() * imageCount) + 1;
-        return `images/tp${randomIndex}.png`;
+        return `images/${randomIndex}.jpg`;
     }
 
     showClassmateInfo(data) {
         // 设置随机弹窗背景
         const modalBody = this.domElements.modal.querySelector('.modal-body');
-        modalBody.style.backgroundImage = `url('${this.getRandomImage()}')`;
+        const bgImage = `url('${this.getRandomImage()}')`;
+        modalBody.style.backgroundImage = bgImage;
         modalBody.style.backgroundSize = 'cover';
         modalBody.style.backgroundPosition = 'center';
         modalBody.style.opacity = '0.8';
@@ -219,6 +220,64 @@ class ClassmateMap {
             `;
             this.domElements.classmatesTable.appendChild(row);
         });
+        
+        // 分析背景亮度并调整文字颜色
+        const img = new Image();
+        img.crossOrigin = 'Anonymous';
+        img.src = this.getRandomImage();
+        
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 100;
+            canvas.height = 100;
+            ctx.drawImage(this, 0, 0, canvas.width, canvas.height);
+            
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+            let brightness = 0;
+            
+            // 采样计算平均亮度
+            for (let i = 0; i < data.length; i += 16) {
+                brightness += (data[i] * 0.299 + data[i+1] * 0.587 + data[i+2] * 0.114);
+            }
+            brightness = brightness / (data.length / 16);
+            
+            // 调整所有文字元素的颜色
+            const textElements = document.querySelectorAll('.modal-body *');
+            const textColor = brightness > 128 ? '#000000' : '#FFFFFF';
+            
+            textElements.forEach(el => {
+                if (el.textContent && el.textContent.trim() !== '') {
+                    el.style.color = textColor;
+                    // 根据文字颜色设置发光效果
+                    if (brightness > 128) {
+                        // 黑色文字使用白色发光效果
+                        el.style.textShadow = `
+                            0 0 2px rgba(255,255,255,0.8),
+                            0 0 4px rgba(255,255,255,0.5)
+                        `;
+                    } else {
+                        // 白色文字使用黑色发光效果
+                        el.style.textShadow = `
+                            0 0 2px rgba(0,0,0,0.8),
+                            0 0 4px rgba(0,0,0,0.5)
+                        `;
+                    }
+                    // 移除之前设置的背景色和内边距
+                    el.style.backgroundColor = '';
+                    el.style.padding = '';
+                    el.style.borderRadius = '';
+                }
+            });
+            
+            // 特别处理表头行，强制设置为透明背景
+            const tableHeaders = document.querySelectorAll('.modal-body th');
+            tableHeaders.forEach(th => {
+                th.style.backgroundColor = 'transparent';
+                th.style.setProperty('background-color', 'transparent', 'important');
+            });
+        };
         
         // 显示模态框
         this.domElements.modal.style.display = 'flex';
