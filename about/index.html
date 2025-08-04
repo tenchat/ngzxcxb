@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于我们</title>
+    <style>
+        /* body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Microsoft YaHei', sans-serif;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+        } */
+        
+   
+        /* 内容区域 */
+        .content-box {
+            margin: 8%;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .nav-bar {
+                padding: 10px 5%;
+            }
+            .content-box {
+                margin: 5%;
+                padding: 20px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>  
+    <!-- 导航栏 -->
+    <nav class="main-nav">
+        <div class="nav-content">
+            <div class="nav-logo">
+                <object data="../svg/title.svg" type="image/svg+xml"></object>
+            </div>
+            <div class="nav-links">
+                <a href="../" class="nav-link" sty>首页</a>
+                <a href="https://www.wjx.cn/vm/e4hYEud.aspx# " class="nav-link">问卷填写</a>
+                <a href="../about/" class="nav-link">关于</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- 内容区域 -->
+    <div class="content-box">
+        <h2>关于本项目</h2>
+        <p>本项目的主要目的是为了记录2021届创新班同学的毕业学校所在地，方便大家查看和交流。去年拿ChatGPT写了一个类似的网站，效果不是很好(；´д｀)ゞ,今年突然心血来潮就手搓了这么个网站。尽管相较于去年的已经有较大提升，但还是难掩内核的简陋，算啦能用就行了~</p>
+        <p>如果地图上找不到你的名字，说明你没填问卷，先去填一下<a href="https://www.wjx.cn/vm/e4hYEud.aspx#">问卷</a>然后再联系我。</a></p>
+        <p>本站所储存图片仅供学习交流使用，如有侵权，请联系删除。</p>
+        <p>Email:o.0_what@qq.com</p>
+    </div>
+    <script>
+        // 设置随机背景
+        const bgImages = Array.from({length: 93}, (_, i) => `../images/${i+1}.jpg`);
+        const randomBg = bgImages[Math.floor(Math.random() * bgImages.length)];
+        document.body.style.backgroundImage = `url('${randomBg}')`;
+        
+        // 保持背景图片比例
+        document.body.style.backgroundRepeat = 'no-repeat';
+        document.body.style.backgroundAttachment = 'fixed';
+        document.body.style.backgroundSize = 'cover';
+        document.body.style.backgroundPosition = 'center';
+
+        // 检测背景亮度并调整文字颜色
+        const img = new Image();
+        img.crossOrigin = 'Anonymous';
+        img.src = randomBg;
+        
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 100;
+            canvas.height = 100;
+            ctx.drawImage(this, 0, 0, canvas.width, canvas.height);
+            
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+            let brightness = 0;
+            
+            // 采样计算平均亮度
+            for (let i = 0; i < data.length; i += 16) {
+                brightness += (data[i] * 0.299 + data[i+1] * 0.587 + data[i+2] * 0.114);
+            }
+            brightness = brightness / (data.length / 16);
+            
+            // 调整文字颜色
+            const textColor = brightness > 128 ? '#333' : '#fff';
+            const textElements = document.querySelectorAll('.content-box *');
+            
+            textElements.forEach(el => {
+                if (el.textContent && el.textContent.trim() !== '') {
+                    el.style.color = textColor;
+                    // 添加发光效果提高可读性
+                    if (brightness > 128) {
+                        el.style.textShadow = '0 0 4px rgba(0,0,0,0.3)';
+                    } else {
+                        el.style.textShadow = '0 0 4px rgba(255,255,255,0.3)';
+                    }
+                }
+            });
+        };
+    </script>
+</body>
+</html>

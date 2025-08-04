@@ -12,7 +12,8 @@ class ClassmateMap {
             backgroundImages: Array.from({length: 93}, (_, i) => `./images/${i+1}.jpg`), // 图片存放在bg文件夹内，命名为1.jpg~n.jpg
             audioFiles: {
                 mapClick: 'sounds/MapClick.mp3',
-                menuClose: 'sounds/MenuClose.mp3'
+                menuClose: 'sounds/MenuClose.mp3',
+                domainEnter: 'sounds/DomainEnter.mp3',
             }
         };
         
@@ -172,11 +173,58 @@ class ClassmateMap {
         this.createPoints(sampleData);
     }
     
+    addCustomPoint(config) {
+        const point = document.createElement('div');
+        point.className = 'point custom-point';
+        point.style.left = `${config.x}%`;
+        point.style.top = `${config.y}%`;
+        
+        // 设置自定义图标
+        if (config.icon) {
+            point.style.backgroundImage = `url('${config.icon}')`;
+            point.style.backgroundSize = 'contain';
+        }
+        
+        // 存储自定义数据
+        point.dataset.custom = true;
+        point.dataset.title = config.title;
+        point.dataset.content = JSON.stringify(config.content);
+        
+        point.addEventListener('click', () => {
+            // 播放预加载的domainEnter音效
+            if (this.audioElements.domainEnter) {
+                this.audioElements.domainEnter.currentTime = 0;
+                this.audioElements.domainEnter.play().catch(e => console.log('domainEnter音效播放失败:', e));
+            }
+            this.showCustomPointInfo(config);
+        });
+        
+        this.domElements.pointsContainer.appendChild(point);
+    }
+
     createPoints(data) {
         data.forEach(item => {
             const point = this.createPointElement(item);
             this.domElements.pointsContainer.appendChild(point);
         });
+
+        // 添加自定义标记点
+        const customPoint = {
+            x: "62.04",
+            y: "50.65",
+            icon: 'images/tp3.png',
+            title: '河北南宫中学',
+            content: [
+                '语文老师: 郝慧',
+                `数学老师: 徐丽聘`,
+                '英语老师: 聂书雪',
+                '物理老师: 李庆申',
+                '化学老师: 云桂娟',
+                '生物老师: 杜美珍',
+            ],
+            custom: true
+        };
+        this.addCustomPoint(customPoint);
     }
     
     createPointElement(data) {
@@ -223,6 +271,68 @@ class ClassmateMap {
         return `./images/${randomIndex}.jpg`;
     }
 
+    showCustomPointInfo(config) {
+        // 播放预加载的domainEnter音效
+        if (this.audioElements.domainEnter) {
+            this.audioElements.domainEnter.currentTime = 0;
+            this.audioElements.domainEnter.play().catch(e => console.log('domainEnter音效播放失败:', e));
+        }
+        
+        // 设置模态框标题
+        this.domElements.modalTitle.textContent = config.title;
+        
+        // 清空并重建表格
+        const table = this.domElements.classmatesTable;
+        table.innerHTML = '';
+        table.style.tableLayout = 'fixed';
+        table.style.width = '100%';
+        
+        // 创建tbody
+        const tbody = document.createElement('tbody');
+        tbody.className = 'custom-point-table';
+        tbody.style.display = 'table';
+        tbody.style.width = '100%';
+        
+        // 计算最大列数
+        let maxColumns = 2;
+        config.content.forEach(item => {
+            const columns = item.split(':').length;
+            if (columns > maxColumns) maxColumns = columns;
+        });
+        
+        config.content.forEach(item => {
+            const tr = document.createElement('tr');
+            const parts = item.split(':').map(s => s.trim());
+            
+            // 动态创建每列
+            parts.forEach((part, index) => {
+                const td = document.createElement('td');
+                td.textContent = part + (index < parts.length - 1 ? ':' : '');
+                td.style.textAlign = 'center';
+                td.style.fontFamily = '隶书, SimLi, sans-serif';
+                td.style.width = `${100/maxColumns}%`; // 根据最大列数平均分配宽度
+                td.style.padding = '8px';
+                td.style.wordBreak = 'break-word';
+                tr.appendChild(td);
+            });
+            
+            // 补充缺失的列以保持对齐
+            while (parts.length < maxColumns) {
+                const td = document.createElement('td');
+                td.style.width = `${100/maxColumns}%`;
+                tr.appendChild(td);
+                parts.push('');
+            }
+            
+            tbody.appendChild(tr);
+        });
+        
+        table.appendChild(tbody);
+        
+        // 显示模态框
+        this.domElements.modal.style.display = 'flex';
+    }
+
     showClassmateInfo(data) {
         // 设置随机弹窗背景
         const modalBody = this.domElements.modal.querySelector('.modal-body');
@@ -242,7 +352,21 @@ class ClassmateMap {
         // 清空表格
         this.domElements.classmatesTable.innerHTML = '';
         
+        // 如果不是自定义弹窗，添加表头
+        if (!data.custom) {
+            const thead = document.createElement('thead');
+            thead.innerHTML = `
+                <tr>
+                    <th>姓名</th>
+                    <th>大学</th>
+                    <th>地址</th>
+                </tr>
+            `;
+            this.domElements.classmatesTable.appendChild(thead);
+        }
+        
         // 填充同学数据
+        const tbody = document.createElement('tbody');
         data.classmates.forEach(classmate => {
             const row = document.createElement('tr');
             row.innerHTML = `
@@ -250,8 +374,9 @@ class ClassmateMap {
                 <td>${classmate.university}</td>
                 <td>${classmate.address}</td>
             `;
-            this.domElements.classmatesTable.appendChild(row);
+            tbody.appendChild(row);
         });
+        this.domElements.classmatesTable.appendChild(tbody);
         
         // 分析背景亮度并调整文字颜色
         const img = new Image();
