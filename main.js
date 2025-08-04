@@ -9,8 +9,14 @@ class ClassmateMap {
             pointSize: 20,
             pointColor: '#ff5722',
             pointHoverColor: '#ff9800',
-            backgroundImages: Array.from({length: 93}, (_, i) => `./images/${i+1}.jpg`) // 图片存放在bg文件夹内，命名为1.jpg~n.jpg
+            backgroundImages: Array.from({length: 93}, (_, i) => `./images/${i+1}.jpg`), // 图片存放在bg文件夹内，命名为1.jpg~n.jpg
+            audioFiles: {
+                mapClick: 'sounds/MapClick.mp3',
+                menuClose: 'sounds/MenuClose.mp3'
+            }
         };
+        
+        this.audioElements = {};
         
         this.domElements = {
             mapContainer: document.querySelector('.map-area'),
@@ -35,15 +41,15 @@ class ClassmateMap {
         document.body.style.backgroundPosition = 'center';
         document.body.style.backgroundRepeat = 'no-repeat';
     }
-    
     async init() {
         this.showLoading('正在加载数据...');
         
         try {
-            // 并行加载地图和数据
+            // 并行加载地图、数据和音频
             await Promise.all([
-                this.loadMap('./svg/china.svg'),
-                this.loadData('./data/classmates.json')
+                this.loadMap('svg/china.svg'),
+                this.loadData('./data/classmates.json'),
+                this.loadAudioFiles()
             ]);
             
             this.hideLoading();
@@ -54,6 +60,25 @@ class ClassmateMap {
         }
         
         this.setupEventListeners();
+    }
+    
+    async loadAudioFiles() {
+        try {
+            // 预加载所有音频文件
+            await Promise.all(
+                Object.entries(this.config.audioFiles).map(async ([key, path]) => {
+                    const audio = new Audio(path);
+                    await new Promise((resolve) => {
+                        audio.addEventListener('canplaythrough', resolve, { once: true });
+                        audio.addEventListener('error', resolve); // 即使加载失败也不阻塞
+                    });
+                    this.audioElements[key] = audio;
+                    console.log(`音频文件已加载: ${path}`);
+                })
+            );
+        } catch (error) {
+            console.warn('音频预加载时出现错误:', error);
+        }
     }
     
     async loadMap(mapFile) {
@@ -182,9 +207,11 @@ class ClassmateMap {
         });
         
         point.addEventListener('click', () => {
-            // 播放点击音效
-            const clickSound = new Audio('./sounds/MapClick.mp3');
-            clickSound.play().catch(e => console.log('音效播放失败:', e));
+            // 播放预加载的点击音效
+            if (this.audioElements.mapClick) {
+                this.audioElements.mapClick.currentTime = 0; // 重置播放位置
+                this.audioElements.mapClick.play().catch(e => console.log('音效播放失败:', e));
+            }
             this.showClassmateInfo(data);
         });
         
@@ -304,18 +331,22 @@ class ClassmateMap {
     setupEventListeners() {
         // 关闭模态框
         this.domElements.closeBtn.addEventListener('click', () => {
-            // 播放关闭音效
-            const closeSound = new Audio('./sounds/MenuClose.mp3');
-            closeSound.play().catch(e => console.log('关闭音效播放失败:', e));
+            // 播放预加载的关闭音效
+            if (this.audioElements.menuClose) {
+                this.audioElements.menuClose.currentTime = 0; // 重置播放位置
+                this.audioElements.menuClose.play().catch(e => console.log('关闭音效播放失败:', e));
+            }
             this.domElements.modal.style.display = 'none';
         });
         
         // 点击模态框外部关闭
         this.domElements.modal.addEventListener('click', (e) => {
             if (e.target === this.domElements.modal) {
-                // 播放关闭音效
-                const closeSound = new Audio('./sounds/MenuClose.mp3');
-                closeSound.play().catch(e => console.log('关闭音效播放失败:', e));
+                // 播放预加载的关闭音效
+                if (this.audioElements.menuClose) {
+                    this.audioElements.menuClose.currentTime = 0;
+                    this.audioElements.menuClose.play().catch(e => console.log('关闭音效播放失败:', e));
+                }
                 this.domElements.modal.style.display = 'none';
             }
         });
