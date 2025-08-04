@@ -66,7 +66,7 @@
     </div>
     <script>
         // 设置随机背景
-        const bgImages = Array.from({length: 157}, (_, i) => `../images/${i+1}.jpg`);
+        const bgImages = Array.from({length: 157}, (_, i) => `../bg/${i+1}.jpg`);
         const randomBg = bgImages[Math.floor(Math.random() * bgImages.length)];
         document.body.style.backgroundImage = `url('${randomBg}')`;
         
