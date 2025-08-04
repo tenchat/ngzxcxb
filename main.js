@@ -9,7 +9,7 @@ class ClassmateMap {
             pointSize: 20,
             pointColor: '#ff5722',
             pointHoverColor: '#ff9800',
-            backgroundImages: Array.from({length: 93}, (_, i) => `images/${i+1}.jpg`) // 图片存放在bg文件夹内，命名为1.jpg~n.jpg
+            backgroundImages: Array.from({length: 93}, (_, i) => `./images/${i+1}.jpg`) // 图片存放在bg文件夹内，命名为1.jpg~n.jpg
         };
         
         this.domElements = {
@@ -42,8 +42,8 @@ class ClassmateMap {
         try {
             // 并行加载地图和数据
             await Promise.all([
-                this.loadMap('/svg/china.svg'),
-                this.loadData('data/classmates.json')
+                this.loadMap('./svg/china.svg'),
+                this.loadData('./data/classmates.json')
             ]);
             
             this.hideLoading();
@@ -168,7 +168,7 @@ class ClassmateMap {
         
         // 为特定城市设置不同图片
         if (data.city === '北京市') { // 示例：为北京使用tp1.png
-            point.style.backgroundImage = 'url("images/tp1.png")';
+            point.style.backgroundImage = 'url("./images/tp1.png")';
         } 
         //else if (data.city === '上海市') { // 示例：为上海使用tp3.png
             //point.style.backgroundImage = 'url("images/tp3.png")';}
@@ -183,7 +183,7 @@ class ClassmateMap {
         
         point.addEventListener('click', () => {
             // 播放点击音效
-            const clickSound = new Audio('sounds/MapClick.mp3');
+            const clickSound = new Audio('./sounds/MapClick.mp3');
             clickSound.play().catch(e => console.log('音效播放失败:', e));
             this.showClassmateInfo(data);
         });
@@ -193,7 +193,7 @@ class ClassmateMap {
     getRandomImage() {
         const imageCount = 93; // 假设images文件夹下有1.jpg~3.jpg
         const randomIndex = Math.floor(Math.random() * imageCount) + 1;
-        return `images/${randomIndex}.jpg`;
+        return `./images/${randomIndex}.jpg`;
     }
 
     showClassmateInfo(data) {
@@ -305,7 +305,7 @@ class ClassmateMap {
         // 关闭模态框
         this.domElements.closeBtn.addEventListener('click', () => {
             // 播放关闭音效
-            const closeSound = new Audio('sounds/MenuClose.mp3');
+            const closeSound = new Audio('./sounds/MenuClose.mp3');
             closeSound.play().catch(e => console.log('关闭音效播放失败:', e));
             this.domElements.modal.style.display = 'none';
         });
@@ -314,7 +314,7 @@ class ClassmateMap {
         this.domElements.modal.addEventListener('click', (e) => {
             if (e.target === this.domElements.modal) {
                 // 播放关闭音效
-                const closeSound = new Audio('sounds/MenuClose.mp3');
+                const closeSound = new Audio('./sounds/MenuClose.mp3');
                 closeSound.play().catch(e => console.log('关闭音效播放失败:', e));
                 this.domElements.modal.style.display = 'none';
             }
