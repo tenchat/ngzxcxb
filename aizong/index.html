@@ -38,6 +38,7 @@
     <link rel="stylesheet" href="../styles.css">
 </head>
 <body>  
+    <audio id="bgm" src="../sounds/Loyalty.mp3" loop></audio>
     <!-- 导航栏 -->
     <nav class="main-nav">
         <div class="nav-content">
@@ -59,6 +60,15 @@
             <img src="../images/aizong.jpg" alt="大慶國慶昭蘇哀宗皇帝" class="">
     </div>
     <script>
+        const bgm = document.getElementById('bgm');
+
+        // 检查浏览器是否支持自动播放
+        if (bgm.play) {
+            bgm.play().catch(error => {
+                // 自动播放被浏览器阻止时的处理
+                console.log('自动播放被阻止:', error);
+            });
+        }
         // 设置随机背景
         const bgImages = Array.from({length: 157}, (_, i) => `../images/${i+1}.jpg`);
         const randomBg = bgImages[Math.floor(Math.random() * bgImages.length)];
