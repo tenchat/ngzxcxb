@@ -402,7 +402,7 @@ class ClassmateMap {
             
             // 调整所有文字元素的颜色
             const textElements = document.querySelectorAll('.modal-body *');
-            const textColor = brightness > 128 ? '#000000' : '#FFFFFF';
+            const textColor = brightness > 128 ?' #FFFFFF' : '#000000';
             
             textElements.forEach(el => {
                 if (el.textContent && el.textContent.trim() !== '') {
@@ -411,14 +411,14 @@ class ClassmateMap {
                     if (brightness > 128) {
                         // 黑色文字使用白色发光效果
                         el.style.textShadow = `
-                            0 0 2px rgba(255,255,255,0.8),
-                            0 0 4px rgba(255,255,255,0.5)
+                            0 0 2px rgba(0,0,0,0.8),
+                            0 0 4px rgba(0,0,0,0.5)                            
                         `;
                     } else {
                         // 白色文字使用黑色发光效果
                         el.style.textShadow = `
-                            0 0 2px rgba(0,0,0,0.8),
-                            0 0 4px rgba(0,0,0,0.5)
+                            0 0 2px rgba(255,255,255,0.8),
+                            0 0 4px rgba(255,255,255,0.5),
                         `;
                     }
                     // 移除之前设置的背景色和内边距
