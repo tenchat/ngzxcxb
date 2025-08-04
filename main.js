@@ -211,7 +211,7 @@ class ClassmateMap {
         // 添加自定义标记点
         const customPoint = {
             x: "62.04",
-            y: "50.65",
+            y: "51",
             icon: 'images/tp3.png',
             title: '河北南宫中学',
             content: [
