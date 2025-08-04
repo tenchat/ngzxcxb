@@ -96,6 +96,7 @@
         "province": "黑龙江省",
         "city": "哈尔滨市",
         "classmates": [
+            {"name": "苏伟家", "university": "哈尔滨工程大学", "address": "黑龙江省哈尔滨市南岗区南通大街145号"},
             {"name": "宋子朔", "university": "哈尔滨工程大学", "address": "黑龙江省哈尔滨市南岗区南通大街145号"},
             {"name": "马欣泽", "university": "哈尔滨工程大学", "address": "黑龙江省哈尔滨市南岗区南通大街145号"}
         ]

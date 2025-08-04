@@ -59,6 +59,19 @@
     width: 100%;
 }
 
+.active-nav {
+    /* box-shadow: 0 4px 8px 5px rgba(0, 0, 0, 0.3);
+    /* 文字阴影（与盒子阴影风格匹配） */
+    /* text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);  */
+    background-color: rgba(0, 0, 0, 0.1);
+    font-weight: bold;
+    position: relative;
+}
+
+.active-nav-link::after {
+    width: 100% !important;
+}
+
 /* 基础样式重置 */
 * {
     margin: 0;
