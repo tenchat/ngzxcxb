@@ -496,7 +496,7 @@ class ClassmateMap {
         // 显示提示，内容根据方向变化
         warning.style.display = 'block';
         warning.querySelector('p').textContent = isPortrait 
-            ? '请转至横屏以获得最佳体验！'
+            ? '请通过浏览器打开，并旋转至横屏以获得最佳体验！'
             : '请保持横屏以获得最佳体验！';
 
         // 标记为当前会话已显示
