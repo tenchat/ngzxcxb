@@ -9,7 +9,7 @@ class ClassmateMap {
             pointSize: 20,
             pointColor: '#ff5722',
             pointHoverColor: '#ff9800',
-            backgroundImages: Array.from({length: 93}, (_, i) => `./images/${i+1}.jpg`), // 图片存放在bg文件夹内，命名为1.jpg~n.jpg
+            backgroundImages: Array.from({length: 157}, (_, i) => `./images/${i+1}.jpg`), // 图片存放在bg文件夹内，命名为1.jpg~n.jpg
             audioFiles: {
                 mapClick: 'sounds/MapClick.mp3',
                 menuClose: 'sounds/MenuClose.mp3',
@@ -266,7 +266,7 @@ class ClassmateMap {
         return point;
     }
     getRandomImage() {
-        const imageCount = 93; // 假设images文件夹下有1.jpg~3.jpg
+        const imageCount = 157; // 假设images文件夹下有1.jpg~3.jpg
         const randomIndex = Math.floor(Math.random() * imageCount) + 1;
         return `./images/${randomIndex}.jpg`;
     }

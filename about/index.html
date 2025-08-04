@@ -64,13 +64,13 @@
     </div>
     <script>
         // 设置随机背景
-        const bgImages = Array.from({length: 93}, (_, i) => `../images/${i+1}.jpg`);
+        const bgImages = Array.from({length: 157}, (_, i) => `../images/${i+1}.jpg`);
         const randomBg = bgImages[Math.floor(Math.random() * bgImages.length)];
         document.body.style.backgroundImage = `url('${randomBg}')`;
         
         // 保持背景图片比例
         document.body.style.backgroundRepeat = 'no-repeat';
-        document.body.style.backgroundAttachment = 'fixed';
+        document.body.style.backgroundAttachment = 'scroll';
         document.body.style.backgroundSize = 'cover';
         document.body.style.backgroundPosition = 'center';
 
