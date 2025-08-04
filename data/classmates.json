@@ -340,5 +340,14 @@
         "classmates": [
             {"name": "齐姝萌", "university": "福建医科大学", "address": "福建省福州市鼓楼区交通路88号"}
         ]
+    },
+    {
+        "x": "60.71",
+        "y": "52.43",
+        "province": "河北省",
+        "city": "邯郸市",
+        "classmates": [
+            {"name": "王培杰", "university": "邯郸学院", "address": "河北省邯郸市邯山区学院北路530号"}
+        ]
     }
 ]
